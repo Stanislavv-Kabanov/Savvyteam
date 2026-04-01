@@ -30,7 +30,6 @@ jobs:
     - name: Generate Report
       run: |
         lcov --capture --directory . --output-file coverage.info
-        # Убираем системные файлы, чтобы в отчете был только твой код
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info
         genhtml coverage.info --output-directory out_report
 
