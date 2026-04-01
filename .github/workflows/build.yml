@@ -34,7 +34,7 @@ jobs:
         genhtml coverage.info --output-directory out_report
 
     - name: Save Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-html
         path: out_report/
