@@ -10,22 +10,32 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install System Dependencies
+    - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake g++ libsqlite3-dev libgtest-dev
+        sudo apt-get install -y cmake g++ libsqlite3-dev libgtest-dev lcov
         cd /usr/src/gtest
         sudo cmake .
         sudo make
         sudo cp lib/*.a /usr/lib
 
-    - name: Configure CMake
-      run: cmake -S flowers_shop -B build
-
-    - name: Build Project
-      run: cmake --build build
+    - name: Build
+      run: cmake -S flowers_shop -B build && cmake --build build
 
     - name: Run Tests
       run: |
         cd build
         ctest --output-on-failure
+
+    - name: Generate Report
+      run: |
+        lcov --capture --directory . --output-file coverage.info
+        # Убираем системные файлы, чтобы в отчете был только твой код
+        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info
+        genhtml coverage.info --output-directory out_report
+
+    - name: Save Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-html
+        path: out_report/
