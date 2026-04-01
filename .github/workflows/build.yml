@@ -20,7 +20,7 @@ jobs:
         sudo cp lib/*.a /usr/lib
 
     - name: Configure CMake
-      run: cmake -B build -S .
+      run: cmake -S flowers_shop -B build
 
     - name: Build Project
       run: cmake --build build
