@@ -7,44 +7,28 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v2
+    - name: Install gtest manually
+      run: sudo apt-get install libgtest-dev && cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make && sudo cp lib/*.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
     
-    - name: Install SQLite3 and GoogleTest
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libsqlite3-dev
-        sudo apt-get install -y libgtest-dev
-        cd /usr/src/gtest
-        sudo cmake CMakeLists.txt
-        sudo make
-        sudo cp lib/*.a /usr/lib
+    - uses: actions/checkout@v1
     
-    - name: Create directories
-      run: mkdir -p bin build
+    - name: Install SQLite3
+      run: sudo apt-get install -y libsqlite3-dev
     
-    - name: Configure
-      run: cmake -B build -S .
+    - name: configure
+      run: mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
     
-    - name: Build
-      run: cmake --build build
+    - name: make
+      run: cd build && make
     
-    - name: Run tests
-      run: |
-        cd build
-        ctest --output-on-failure
+    - name: Run Test Utils
+      run: ./build/test_utils
     
-    - name: Check test results
-      run: |
-        if [ -f build/test_utils ]; then
-          echo "Test utils found"
-        fi
-        if [ -f build/test_auth ]; then
-          echo "Test auth found"
-        fi
-        if [ -f build/test_database ]; then
-          echo "Test database found"
-        fi
+    - name: Run Test Auth
+      run: ./build/test_auth
+    
+    - name: Run Test Database
+      run: ./build/test_database
