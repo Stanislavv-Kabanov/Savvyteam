@@ -3,10 +3,7 @@ project(FlowerShop)
 
 set(CMAKE_CXX_STANDARD 11)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-endif()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 
 find_package(SQLite3 REQUIRED)
 find_package(GTest REQUIRED)
@@ -25,14 +22,9 @@ add_executable(flower_shop src/main.cpp ${SOURCES})
 target_link_libraries(flower_shop ${SQLite3_LIBRARIES})
 
 enable_testing()
-
 function(create_flower_test TEST_NAME TEST_SOURCE)
     add_executable(${TEST_NAME} ${TEST_SOURCE} ${SOURCES})
-    target_link_libraries(${TEST_NAME} 
-        GTest::GTest 
-        ${SQLite3_LIBRARIES} 
-        Threads::Threads
-    )
+    target_link_libraries(${TEST_NAME} GTest::GTest ${SQLite3_LIBRARIES} Threads::Threads)
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endfunction()
 
