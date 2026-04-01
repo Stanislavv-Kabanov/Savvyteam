@@ -31,7 +31,7 @@ jobs:
       run: |
         lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch,unused,gcov
         lcov --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info --ignore-errors mismatch,unused,gcov
-        genhtml coverage.info --output-directory out_report --ignore-errors mismatch,unused,gcov
+        genhtml coverage.info --output-directory out_report --ignore-errors mismatch,unused
 
     - name: Save Report
       uses: actions/upload-artifact@v4
