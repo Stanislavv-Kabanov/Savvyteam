@@ -25,7 +25,6 @@ function(create_flower_test TEST_NAME TEST_SOURCE)
     add_executable(${TEST_NAME} ${TEST_SOURCE} ${SOURCES})
     target_link_libraries(${TEST_NAME} 
         GTest::GTest 
-        GTest::Main 
         ${SQLite3_LIBRARIES} 
         Threads::Threads
     )
