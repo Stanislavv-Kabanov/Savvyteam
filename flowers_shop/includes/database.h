@@ -7,10 +7,9 @@
 #include <map>
 
 class Database {
-private:
-    sqlite3* db;
-
 public:
+
+    sqlite3* db;
     Database();
     ~Database();
 
