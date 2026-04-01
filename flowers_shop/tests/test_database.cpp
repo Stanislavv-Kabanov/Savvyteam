@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+#include <cstdio>           
 #include "../includes/database.h"
+#include "../includes/utils.h" 
 
 class DatabaseTest : public ::testing::Test {
 protected:
@@ -7,6 +9,7 @@ protected:
     
     void SetUp() override {
         sqlite3_open("test.db", &db.db);
+        
         db.exec("CREATE TABLE flowers (flower_id INTEGER PRIMARY KEY, name TEXT, variety TEXT, price_per_unit REAL)");
         db.exec("INSERT INTO flowers VALUES (1, 'Rose', 'Red', 5.0)");
         db.exec("CREATE TABLE config (config_key TEXT, config_value TEXT)");
